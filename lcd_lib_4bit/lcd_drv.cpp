@@ -10,6 +10,10 @@ void _hd44780_drv::send_cmd(){
 
 }
 
+void _hd44780_drv::send_nib(char _rs,char data){
+  
+}
+
 void _hd44780_drv::init_lcd(){
   RSPORT << (0 << RS);
   D7PORT << (0 << D7);
