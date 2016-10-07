@@ -2,7 +2,7 @@
 #include <avr/common.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include "lcd_lib_4bit/lcd_drv.h"
+#include "lcd_lib_4bit/lcd_drv.hpp"
 
 #define F_CPU 16000000
 #define BAUD 9600
@@ -11,7 +11,7 @@
 #include <util/setbaud.h>
 
 void UART_sendchar(char sendchar) {
-  while ((UCSR1A & 0b01000000) != 1);
+  _delay_ms(1);
   UDR1 = sendchar;
 }
 
@@ -29,6 +29,8 @@ int main(void) {
 
   UCSR1B = (1 << RXEN1);
   UCSR1B = (1 << TXEN1);
+
+
 
   //asm("hlt");
 }
