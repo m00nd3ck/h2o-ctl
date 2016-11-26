@@ -12,7 +12,7 @@ heximage:
 	clear
 	@rm -f image.hex
 	@echo "[ $(RED)RM$(CLEAR) ]" $@
-	@$(CC) -mmcu=atmega32u4 -Os -o output.elf main.cpp lcd_lib_4bit/lcd_drv.cpp
+	@$(CC) -mmcu=atmega32u4 -Os -o output.elf main.c
 	@echo "[ $(GREEN)AVR-GCC$(CLEAR) ]" $@
 	@$(OBJCOPY) -j .text -j .data -O ihex output.elf image.hex
 	@echo "[ $(YELLOW)OBJCOPY$(CLEAR) ]" $@
