@@ -62,19 +62,17 @@ int main(void) {
 
   DDRB = (1 << DDB0);
 
+  TWBR = 18;
 
-  while (selftest_loop < 5) {
-    PORTC = (1 << PC6);
-    _delay_ms(100);
-    PORTC = (0 << PC6);
-    _delay_ms(100);
-    selftest_loop++;
-  }
+  i2c_init();
+
 
   while (1) {
-    PORTD = (1 << PD5);
-    _delay_ms(1000);
-    PORTD = (0 << PD5);
-    _delay_ms(1000);
+    i2c_start();
+    i2c_send(0x7E);
+    if (i2c_status() != 0x28) ;
+    i2c_send(0b10101010);
+    i2c_stop();
+
   }
 }
