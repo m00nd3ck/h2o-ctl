@@ -12,11 +12,11 @@ heximage:
 	clear
 	@rm -f image.hex
 	@echo "[ $(RED)RM$(CLEAR) ]" $@
-	@$(CC) -mmcu=atmega32u4 -Os -o output.elf main.c i2c.c
+	@$(CC) -mmcu=atmega32u4 -Os -o output.elf main.c uart.c disp.c i2c.c system.c
 	@echo "[ $(GREEN)AVR-GCC$(CLEAR) ]" $@
 	@$(OBJCOPY) -j .text -j .data -O ihex output.elf image.hex
 	@echo "[ $(YELLOW)OBJCOPY$(CLEAR) ]" $@
 	@rm output.elf
 	@echo "[ $(RED)RM$(CLEAR) ]" $@
 program:
-	sudo avrdude -vvvvv -c avr109 -P $(SERPORT) -p m32u4 -b 57600 -V -Uflash:w:image.hex:i
+	avrdude -vvvvv -c avr109 -P $(SERPORT) -p m32u4 -b 57600 -V -Uflash:w:image.hex:i

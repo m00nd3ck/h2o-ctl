@@ -1,53 +1,4 @@
-#include <stdlib.h>
-#include <stdint.h>
-#include <avr/common.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-#undef F_CPU
-#define F_CPU 16000000
-#define BAUD 9600
-
-#include <util/delay.h>
-#include <util/setbaud.h>
-
-char data = 0;
-char selftest_loop = 0;
-
-void UART_sendchar(char sendchar) {
-  while (!(UCSR1A & (1 << UDRE1)));
-  UDR1 = sendchar;
-}
-
-void UART_out(char *UART_out_text) {
-  while(*UART_out_text != 0){
-    UART_sendchar(*UART_out_text);
-    UART_out_text++;
-  }
-}
-
-char UART_rec() {
-  return UDR1;
-}
-
-void msgout(char *msgtext,int msglvl) {
-  switch (msglvl) {
-    case 1:
-      UART_out("[MSG] ");
-      break;
-    case 2:
-      UART_out("[DBG] ");
-      break;
-    case 3:
-      UART_out("[ERR] ");
-      break;
-    case 4:
-      UART_out("[CRITICAL] ");
-      break;
-  }
-  UART_out(msgtext);
-  UART_out("\n\r");
-}
+#include "main.h"
 
 int main(void) {
   UBRR1H = UBRRH_VALUE;
@@ -65,14 +16,15 @@ int main(void) {
   TWBR = 18;
 
   i2c_init();
+  pcf_send(0x7E,0x00); //zero it out so we are in a known state
 
-
-  while (1) {
+  
+  while(1){
     i2c_start();
-    i2c_send(0x7E);
+    i2c_send(0xD0);
     if (i2c_status() != 0x28) ;
-    i2c_send(0b10101010);
     i2c_stop();
-
+    
+    
   }
 }
